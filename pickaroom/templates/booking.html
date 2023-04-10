@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en">
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Visual Booking Part">
+    <meta name="description" content="">
+    <title>Book a room at {{hotel.name}}</title>
+    <link rel="stylesheet" href="{% static 'nicepage.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'Page-4.css' %}" media="screen">
+    <script class="u-script"src="{% static 'jquery.js' %}"></script>
+    <script class="u-script" src="{% static 'nicepage.js' %}"></script>
+    <meta name="generator" content="Nicepage 5.2.0, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "",
+		"logo": "images/PickARoomlogo.png"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="Booking">
+    <meta property="og:type" content="website">
+  </head>
+
+  <body class="u-body u-xl-mode" data-lang="en">
+    <header class="u-clearfix u-header u-palette-1-dark-2 u-header" id="sec-3847">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <a href="/" class="u-image u-logo u-image-1" data-image-width="430" data-image-height="227">
+          <img src="{% static 'images/PickARoomlogo.png' %}" class="u-logo-image u-logo-image-1">
+        </a>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'login' %}" class="u-border-none u-btn u-button-style u-grey-60 u-btn-1">Login</a>
+        <a href="{% url 'register' %}" class="u-border-none u-btn u-button-style u-grey-60 u-btn-2">Register</a>
+        {% else %}
+        <a href="{% url 'logout' %}" class="u-border-none u-btn u-button-style u-grey-60 u-btn-2">Logout</a>
+        {% endif %}
+      </div>
+    </header>
+    <section class="u-clearfix u-image u-section-1" id="sec-1126" data-image-width="1920" data-image-height="1200">
+      <div style='background-color:darkgreen;padding:3px'>
+        {% for message in messages %}
+        <p class="u-custom-item u-text u-text-default u-text-8">{{message}}</p>
+        {% endfor %}
+      </div>
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-clearfix u-rich-text u-text u-text-1">
+          <h1 style="text-align: center;">
+            <span class="u-text-palette-4-base">{{hotel.name}} Booking Page</span>
+          </h1>
+          <p>
+            <span class="u-text-palette-4-light-2">Enter the date you would like and select what rooms you would like to
+              book</span>
+          </p>
+        </div>
+        <div>
+          <style>
+            button {
+              width: 50px;
+              height: 50px;
+              background-size: contain;
+              background-repeat: no-repeat;
+              background-position: center;
+            }
+
+            .selected {
+              background-color: yellow;
+            }
+          </style>
+          <script>
+            function toggleButton(button) {
+              button.classList.toggle('selected');
+            }
+          </script>
+          {% for floors in bookable_rooms %}
+          <p style="color:white">Floor {{ forloop.counter }}</p>
+          <table>
+            {% for rows in floors %}
+            <tr>
+              {% for room in rows %}
+              {% if room.id in booked_rooms %}
+              <td>
+                <div class="relative">
+                  <button class="bookedrooms" id="room-{{ room.id }}" data-id="{{ room.room_no }}"
+                    style="background-color:gray; cursor: pointer;">■</button>
+
+                  <ul id="menu" class="absolute hidden">
+                    <li>Cancel</li>
+                  </ul>
+                </div>
+              </td>
+              {% elif room.room_no == "EL" %}
+              <td>
+                <button disabled style="background-image: url({% static 'images/Hotel Lift.png' %});"></button>
+              </td>
+              {% elif room.room_no == "ST" %}
+              <td>
+                <button disabled style="background-image: url({% static 'images/Hotel Stairs.jfif' %});"></button>
+              </td>
+              {% elif room.room_no == "DN" %}
+              <td>
+                <button disabled style="background-image: url({% static 'images/Hotel Dining.jfif' %});"></button>
+              </td>
+              {% elif room.room_no == "SP" %}
+              <td>
+                <button disabled style="background-image: url({% static 'images/Hotel Pool.png' %});"></button>
+              </td>
+              {% elif room.room_no == "R" %}
+              <td>
+                <button disabled style="background-image: url({% static 'images/Hotel Reception.jpg' %});"></button>
+              </td>
+              {% elif room.room_no == "N" %}
+              <td>
+                <button disabled style="background-image: url({% static 'images/Hotel Entrance.jpg' %});"></button>
+              </td>
+              {% elif room.room_no != 0 %}
+              <td>
+                <button type="button" onclick="toggleButton(this)" class="number-button">{{ room.room_no }}</button>
+              </td>
+              {% else %}
+              <td>
+                <button disabled style="background-color:gray;">■</button>
+              </td>
+              {% endif %}
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+          {% endfor %}
+
+
+          <script>
+            function submitForm(event) {
+              event.preventDefault();
+              const form = document.querySelector('form');
+              const selectedButtons = document.querySelectorAll('button.selected');
+              const bookedRoomIds = ({{booked_room_ids|safe}});
+
+              const buttonValues = Array.from(selectedButtons)
+                                        .map(button => button.textContent)
+                                        .filter(button => bookedRoomIds.indexOf(button.textContent) == -1);
+
+
+              const input = document.createElement('input');
+              input.setAttribute('type', 'hidden');
+              input.setAttribute('name', 'selected_buttons');
+              input.setAttribute('value', buttonValues.join(','));
+              form.appendChild(input);
+              form.submit();
+            }
+          </script>
+
+          <form method="post" onsubmit="submitForm(event)">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+
+        <path
+          d="M466.201,237.781L231.534,3.115C229.55,1.131,226.841,0,224.003,0h-192c-4.309,0-8.213,2.603-9.856,6.592 s-0.725,8.555,2.304,11.627l227.136,227.115L24.451,472.448c-3.051,3.051-3.968,7.637-2.304,11.627 c1.664,3.989,5.547,6.592,9.856,6.592h192c2.837,0,5.547-1.131,7.552-3.115l234.667-234.667 C470.382,248.704,470.382,241.963,466.201,237.781z">
+        </path></svg><img></span>
+      </div>
+    </section>
+    <script type="text/javascript">
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+
+    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-cea3">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <p class="u-small-text u-text u-text-variant u-text-1">Sample text. Click to select the Text Element.</p>
+      </div>
+    </footer>
+
+  </body>
+
+  <script>
+  $(document).ready(function(){
+    let menu = $("#menu");
+
+    $('.bookedrooms').click(function(e){
+      let roomNo = $(this).attr('data-id');
+      let hotelId = '{{hotel.id}}';
+      let userChoice = confirm(`Delete booked room ${roomNo}?`);
+
+      if (userChoice == true) {
+        // run the code to delete the booking
+        $.ajax({
+          url: `{%url 'delete-booking'%} `,
+          method: "POST",
+          data: { roomNo: roomNo, hotelId: hotelId },
+          headers: { 'X-CSRFToken': '{{csrf_token}}' },
+          success: function(res){
+            if (res.deleted == true){
+              location.reload();
+            }
+          }
+        })
+      }
+
+      // const rect = $(this).offset();
+
+      // const x = e.clientX - rect.left;
+      // const y = e.clientY - rect.top;
+
+      // // Set the position for menu
+      // $(menu).css({top: `${y}px`});
+      // $(menu).css({left: `${x}px`});
+
+      // // Show the menu
+      // $(menu).removeClass('hidden');
+    });
+  });
+
+// // Hide the menu when clicking outside of it
+// const documentClickHandler = function(e) {
+//   const isClickedOutside = !menu.contains(e.target);
+//   if (isClickedOutside) {
+//       // Hide the menu
+//       menu.classList.add('hidden');
+
+//       // Remove the event handler
+//       document.removeEventListener('click', documentClickHandler);
+//   }
+// };
+</script>
+
+
+</html>

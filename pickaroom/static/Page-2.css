@@ -1,0 +1,92 @@
+ .u-section-1 {
+  background-image: url("images/Booking Page Background.jpg");
+  background-position: 50% 50%;
+}
+
+.u-section-1 .u-sheet-1 {
+  min-height: 1370px;
+}
+
+.u-section-1 .u-btn-1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 43px 509px 0 auto;
+  padding: 0;
+}
+
+.u-section-1 .u-image-1 {
+  width: 470px;
+  height: 328px;
+  margin: 43px 288px 0 auto;
+}
+
+.u-section-1 .u-text-1 {
+  margin: 68px 107px 60px;
+}
+
+@media (max-width: 1199px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 1130px;
+  }
+
+  .u-section-1 .u-btn-1 {
+    margin-right: 309px;
+  }
+
+  .u-section-1 .u-image-1 {
+    margin-top: 19px;
+  }
+
+  .u-section-1 .u-text-1 {
+    margin-right: 190px;
+    margin-left: 7px;
+  }
+}
+
+@media (max-width: 991px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 866px;
+  }
+
+  .u-section-1 .u-btn-1 {
+    margin-right: 89px;
+  }
+
+  .u-section-1 .u-image-1 {
+    margin-top: 18px;
+    margin-right: 250px;
+  }
+
+  .u-section-1 .u-text-1 {
+    margin-top: 16px;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 650px;
+  }
+
+  .u-section-1 .u-btn-1 {
+    margin-right: 0;
+  }
+
+  .u-section-1 .u-image-1 {
+    margin-right: 70px;
+  }
+}
+
+@media (max-width: 575px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 320px;
+  }
+
+  .u-section-1 .u-image-1 {
+    width: 340px;
+    height: 237px;
+    margin-top: 19px;
+    margin-right: 0;
+  }
+}

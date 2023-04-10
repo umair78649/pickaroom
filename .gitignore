@@ -1,0 +1,5 @@
+*.py[cd]
+*.db
+__pycache__
+[ve]nv
+uploads/images
